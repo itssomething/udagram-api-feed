@@ -28,7 +28,6 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 
 // Get all feed items
 router.get('/', async (req: Request, res: Response) => {
-  console.log(process.env);
   const items = await FeedItem.findAndCountAll({order: [['id', 'DESC']]});
   items.rows.map((item) => {
     if (item.url) {
@@ -50,9 +49,7 @@ router.get('/:id',
 router.get('/signed-url/:fileName',
     requireAuth,
     async (req: Request, res: Response) => {
-      console.log('singed res', res);
       const {fileName} = req.params;
-      console.log(fileName)
       const url = AWS.getPutSignedUrl(fileName);
       res.status(201).send({url: url});
     });
